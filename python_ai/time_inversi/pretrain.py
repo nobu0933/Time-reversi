@@ -1,4 +1,4 @@
-"""Distill an ordinary-Othello teacher into the Time Inversi policy/value net."""
+"""Distill an ordinary-Othello teacher into the TIME REVERSI policy/value net."""
 import argparse
 import hashlib
 import json
@@ -84,7 +84,7 @@ def candidate_states(rng, ordinary_games, variant_games, max_turns=512):
                 yield state, position, 'time_inversi'
             state = step(state, int(rng.choice(legal_actions(state))))
         else:
-            raise RuntimeError('Time Inversi game exceeded max_turns')
+            raise RuntimeError('TIME REVERSI game exceeded max_turns')
 
 
 def build_samples(teacher, rng, ordinary_games, variant_games, sample_count,
@@ -125,7 +125,7 @@ def build_samples(teacher, rng, ordinary_games, variant_games, sample_count,
         policy, value, source = teacher.label_with_source(position, state)
         allowed = set(legal_actions(state))
         if any(policy[a] > 0 for a in range(37) if a not in allowed):
-            raise AssertionError('Ordinary and Time Inversi legality disagree')
+            raise AssertionError('Ordinary and TIME REVERSI legality disagree')
         samples.append(Sample(state, policy, value))
         counts[name][source] += 1
         if sample_count >= 100 and number % max(1, sample_count // 10) == 0:

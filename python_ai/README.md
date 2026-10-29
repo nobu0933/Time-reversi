@@ -1,6 +1,6 @@
-# Time Inversi — Python / AlphaZero
+# TIME REVERSI — Python / AlphaZero
 
-Time InversiのルールをPythonへ移植し、自己対戦・MCTS・方策／価値ネットワークによる学習を実装しています。必要な学習データが揃った`Time Inversi`フォルダーだけで環境構築・学習・評価できます。参考にした`AlphaZero`、`Penrosanne`、`P3NROSE`フォルダーは不要です。Git用フォルダーにもOracle元データ・推奨事前学習重み・102回目の追加学習用保存点を含めます。Oracle版PROの再学習前に[専用手順](PRO_TRAINING_GUIDE.md)を確認してください。
+TIME REVERSIのルールをPythonへ移植し、自己対戦・MCTS・方策／価値ネットワークによる学習を実装しています。必要な学習データが揃った`Time Inversi`フォルダーだけで環境構築・学習・評価できます。参考にした`AlphaZero`、`Penrosanne`、`P3NROSE`フォルダーは不要です。Git用フォルダーにもOracle元データ・推奨事前学習重み・102回目の追加学習用保存点を含めます。Oracle版PROの再学習前に[専用手順](PRO_TRAINING_GUIDE.md)を確認してください。
 
 新方式PROだけを最初から順に実行する場合は、[ダウンロードから学習・評価までの手順](PRO_TRAINING_GUIDE.md)を参照してください。
 
@@ -75,19 +75,19 @@ macOS / Linuxでは、環境作成を`python3 -m venv .venv`とし、以降の`.
 
 ### Oracle評価関数から始める新方式PRO
 
-[`mame/6x6-reversi-oracle`](https://github.com/mame/6x6-reversi-oracle)の中盤評価関数と序盤定跡をPythonへ取り込みました。定跡は通常オセロの初手から着手履歴が一致する間だけ使用し、時間反転・角の発動・定跡からの逸脱後には適用しません。その後は、終盤で完全読みできれば厳密な**通常オセロ**の石差を優先し、読み切れなければOracle評価関数で近似します。評価関数は通常オセロでは到達できない盤面も受け付けます。Oracleのネイティブ探索器は使用していません。
+[`mame/6x6-reversi-oracle`](https://github.com/mame/6x6-reversi-oracle)の中盤評価関数と序盤定跡をPythonへ取り込みました。定跡は通常オセロの初手から着手履歴が一致する間だけ使用し、Time reversal・角の発動・定跡からの逸脱後には適用しません。その後は、終盤で完全読みできれば厳密な**通常オセロ**の石差を優先し、読み切れなければOracle評価関数で近似します。評価関数は通常オセロでは到達できない盤面も受け付けます。Oracleのネイティブ探索器は使用していません。
 
-従来の事前学習済み重み`runs/oracle-pretrain-v2.pt`は定跡追加前のOracle評価関数版です。定跡を含む新しい事前学習重みは`runs/oracle-opening-pretrain-v1.pt`です。通常オセロ1,000局面、Time Inversi由来1,000局面を教師にし、定跡89件・通常オセロの厳密解1,229件・Oracle近似評価682件でラベル化しました。8対称で16,000学習例、3,000更新しています。旧版は独立した終盤600局面で旧ニューラル教師版`ordinary-pretrain-v4.pt`の最善手一致363件に対し395件でした。新しい版の比較結果は[検証記録](VALIDATION.md)を参照してください。いずれもTime Inversiの真の最善手を測った数字ではありません。
+従来の事前学習済み重み`runs/oracle-pretrain-v2.pt`は定跡追加前のOracle評価関数版です。定跡を含む新しい事前学習重みは`runs/oracle-opening-pretrain-v1.pt`です。通常オセロ1,000局面、TIME REVERSI由来1,000局面を教師にし、定跡89件・通常オセロの厳密解1,229件・Oracle近似評価682件でラベル化しました。8対称で16,000学習例、3,000更新しています。旧版は独立した終盤600局面で旧ニューラル教師版`ordinary-pretrain-v4.pt`の最善手一致363件に対し395件でした。新しい版の比較結果は[検証記録](VALIDATION.md)を参照してください。いずれもTIME REVERSIの真の最善手を測った数字ではありません。
 
-教師局面の通常オセロ比率は`--ordinary-share`で変更できます。8割に増やした新規学習版と、上記の重みから8割で追学習した版も作って比較しましたが、通常オセロ終盤の最善手一致はそれぞれ182/300・198/300で、元の201/300を上回りませんでした。そのため、自己対戦の開始には`oracle-opening-pretrain-v1.pt`を推奨します。Time Inversiの自己対戦は角での時間反転・逆行・パスを含み、自己対戦の勝敗を教師にして重みを更新します。
+教師局面の通常オセロ比率は`--ordinary-share`で変更できます。8割に増やした新規学習版と、上記の重みから8割で追学習した版も作って比較しましたが、通常オセロ終盤の最善手一致はそれぞれ182/300・198/300で、元の201/300を上回りませんでした。そのため、自己対戦の開始には`oracle-opening-pretrain-v1.pt`を推奨します。TIME REVERSIの自己対戦は角でのTime reversal・逆行・パスを含み、自己対戦の勝敗を教師にして重みを更新します。
 
 以下は`python_ai`で実行します。現在公開中のMIDモデルを上書きしません。
 
 ```powershell
-# Oracle教師だけの精度を通常局面・Time Inversi由来盤面で別集計する
+# Oracle教師だけの精度を通常局面・TIME REVERSI由来盤面で別集計する
 .\.venv\Scripts\python.exe -m time_inversi.ordinary_benchmark --teacher pretrained/oracle-weight.rs --teacher-type oracle --ordinary-games 20 --variant-games 20 --max-empty 6 --approximate-depth 3
 
-# 同梱済みの重みからTime Inversiの自己対戦を開始する
+# 同梱済みの重みからTIME REVERSIの自己対戦を開始する
 .\.venv\Scripts\python.exe -m time_inversi.train --init-model runs/oracle-opening-pretrain-v1.pt --iterations 100 --self-play-games 10 --simulations 64 --output runs/transfer01
 
 # 旧MIDと黒白を交替して直接対局する
@@ -110,7 +110,7 @@ macOS / Linuxでは、環境作成を`python3 -m venv .venv`とし、以降の`.
 
 途中で止めた自己対戦学習は`--resume runs/transfer01/latest.pt --iterations 100`で追加学習できます。`pretrain`は中断再開できず、重みは全更新終了時に保存します。Oracle版の重みから始める100イテレーションは、このPCでの1イテレーションと評価対局の実測を外挿すると約8.4時間です。変動を見込んで8〜12時間の予定枠を取り、最初の5〜10イテレーションから残り時間を見積もってください。MIDとの追加比較は含みません。
 
-係数表の出典とハッシュは[ORACLE_SOURCE.md](pretrained/ORACLE_SOURCE.md)を参照してください。旧Alpha Zero General教師の重みは現行学習に不要なため、Git用フォルダーから除いています。Oracle版も通常ルールの結果を教えるだけで、Time Inversiの勝敗を保証しません。自己対戦後にMIDとの直接対局で棋力を確認してください。現在のブラウザ用PROには307回目の重みを`../assets/ai/pro-model.js`へ書き出しています。
+係数表の出典とハッシュは[ORACLE_SOURCE.md](pretrained/ORACLE_SOURCE.md)を参照してください。旧Alpha Zero General教師の重みは現行学習に不要なため、Git用フォルダーから除いています。Oracle版も通常ルールの結果を教えるだけで、TIME REVERSIの勝敗を保証しません。自己対戦後にMIDとの直接対局で棋力を確認してください。現在のブラウザ用PROには307回目の重みを`../assets/ai/pro-model.js`へ書き出しています。
 1イテレーションは「自己対戦 → リプレイバッファに蓄積 → ミニバッチ学習 → 保存」です。5イテレーションごとにランダムAI・簡易貪欲AIと評価対局します。最初の12手はMCTSの訪問割合で着手を抽選し、それ以降は最多訪問手から選びます。自己対戦の探索だけにDirichletノイズを加えます。
 
 主な設定：
@@ -215,13 +215,13 @@ MIDとPROはブラウザだけで動きます。MIDの100回目は`../assets/ai/
 .\.venv\Scripts\python.exe -c "import json; from pathlib import Path; from time_inversi.rules import create_game; Path('state.json').write_text(json.dumps(create_game().to_dict()), encoding='utf-8')"
 ```
 
-## Time Inversiへの対応
+## TIME REVERSIへの対応
 
 - 6×6盤、黒先手、初期配置はブラウザと同じ。
-- 通常の挟み込み、配置後の逆方向履歴の消化、パス、初回の角配置による時間反転を再現。
+- 通常の挟み込み、配置後の逆方向履歴の消化、パス、初回の角配置によるTime reversalを再現。
 - パス履歴は消去しない空の1手として保持。駒の消滅でも過去の裏返しは戻しません。
 - 消滅と角反転の処理後に終局を判定。最初の時刻へ戻っても自動反転しません。
-- 選択可能な行動は36マス＋パスの37通り。手動時間反転は現在のUIにないため行動に含めません。`invert()`はJavaScriptとの照合用の内部APIです。
+- 選択可能な行動は36マス＋パスの37通り。手動Time reversalは現在のUIにないため行動に含めません。`invert()`はJavaScriptとの照合用の内部APIです。
 - MCTSの局面識別には駒の色、配置方向、手番、時間方向、両方向の全履歴、使用済みの角を使用。時計は演出なので探索・学習入力から除外します。
 
 ネットワークは8枚の盤面入力（自分／相手、順行／逆行駒、使用済み角、合法マス、時間方向、手番色）を残差CNNで処理し、順行・逆行の全履歴をGRUで処理します。パス・空履歴・パディングは別のトークンです。履歴の順序や長さを固定長で切り捨てません。方策37出力と、手番側から見た勝敗価値1出力を学習します。

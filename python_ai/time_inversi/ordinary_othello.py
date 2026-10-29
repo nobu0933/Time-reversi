@@ -1,4 +1,4 @@
-"""Ordinary 6x6 Othello, independent of Time Inversi's corner inversions."""
+"""Ordinary 6x6 Othello, independent of TIME REVERSI's corner inversions."""
 from dataclasses import dataclass
 from .rules import BLACK, WHITE, PASS, flips, moves
 

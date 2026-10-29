@@ -64,7 +64,7 @@ def parser():
     p.add_argument('--output', type=Path)
     p.add_argument('--resume', type=Path)
     p.add_argument('--init-model', type=Path,
-                   help='Start a new Time Inversi run from ordinary-Othello distilled weights')
+                   help='Start a new TIME REVERSI run from ordinary-Othello distilled weights')
     return p
 
 

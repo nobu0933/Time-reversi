@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#608000">
-  <title>Time Inversi</title>
+  <title>TIME REVERSI</title>
   <link rel="stylesheet" href="styles/style.css">
   <script defer src="src/game/rules.js"></script>
   <script defer src="src/game/replay.js"></script>
@@ -24,30 +24,39 @@
       <feComposite in="softenedBlue" in2="tinted" operator="over"/>
     </filter>
   </defs></svg>
-  <main class="stage" aria-label="Time Inversi">
+  <main class="stage" aria-label="TIME REVERSI">
     <div class="board"><div id="cells" class="cells" role="group" aria-label="Reversi board"></div></div>
     <div id="time-clock" class="time-clock" role="img" aria-label="Forward time">
       <span class="clock-sectors"></span>
       <img class="clock-frame" src="assets/icon/pocket-watch-frame.svg" alt="">
       <img class="clock-hand" src="assets/icon/pocket-watch-hand.svg" alt="">
     </div>
-    <button id="title" class="title control" type="button" aria-label="Time Inversi — new game">TIME INVERSI</button>
+    <button id="title" class="title control" type="button" aria-label="TIME REVERSI — move record">TIME REVERSI</button>
     <div class="time-actions control">
       <button id="replay" class="icon-button" type="button" aria-label="Replay game" title="Replay game" hidden><img src="assets/icon/replay.svg" alt=""></button>
+      <button id="new-game-button" class="icon-button" type="button" aria-label="New game" title="New game"><img src="assets/icon/reset.svg" alt=""></button>
       <button id="bgm" class="icon-button" type="button" aria-label="BGM" aria-pressed="true" title="BGM on"><img src="assets/icon/bgm-on.svg" alt=""></button>
     </div>
     <div class="player-panel white-player control">
       <span class="piece white player-disc"><span class="body" aria-hidden="true"></span><span id="white-count" class="stone-count" hidden></span></span>
-      <div class="cpu-control"><span>CPU</span><button id="cpu-white" type="button" data-mode="EZY" aria-label="White CPU: EZY" aria-pressed="true" title="White CPU: random">EZY</button></div>
+      <div class="cpu-control"><span id="cpu-label-white">CPU</span><button id="cpu-white" type="button" data-mode="EZY" aria-label="White CPU: EZY" aria-pressed="true" title="White CPU: random">EZY</button></div>
     </div>
     <div class="player-panel black-player control">
-      <div class="cpu-control"><span>CPU</span><button id="cpu-black" type="button" data-mode="OFF" aria-label="Black CPU: OFF" aria-pressed="false" title="Black CPU: human">OFF</button></div>
+      <div class="cpu-control"><span id="cpu-label-black" hidden>CPU</span><button id="cpu-black" type="button" data-mode="OFF" aria-label="Black player: PLY (human)" aria-pressed="false" title="Black player: human">PLY</button></div>
       <span class="piece player-disc"><span class="body" aria-hidden="true"></span><span id="black-count" class="stone-count" hidden></span></span>
     </div>
     <p id="log" class="game-log" role="status" aria-live="polite">Black's turn</p>
+    <p id="cpu-thinking" class="cpu-thinking" role="status" aria-live="polite" hidden>CPU thinking...</p>
     <div id="pass-overlay" hidden aria-hidden="true"></div>
     <dialog id="new-game" aria-labelledby="new-game-question" class="control">
       <form method="dialog"><p id="new-game-question">New game?</p><div class="dialog-actions"><button value="yes">Yes</button><button value="no" autofocus>No</button></div></form>
+    </dialog>
+    <dialog id="record-dialog" aria-labelledby="record-dialog-title" class="control record-dialog">
+      <p id="record-dialog-title">Move record</p>
+      <div class="record-import-row"><textarea id="record-import" rows="1" placeholder="Paste a new record" aria-label="Paste a new record" spellcheck="false" autocapitalize="none" autocomplete="off"></textarea><button id="replay-import" type="button">Replay</button></div>
+      <p id="record-import-error" role="alert" hidden></p>
+      <div class="record-row"><output id="record-text" class="record-text"></output><button id="copy-record" type="button">Copy</button></div>
+      <form method="dialog"><button>Close</button></form>
     </dialog>
   </main>
 </body>

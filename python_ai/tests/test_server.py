@@ -8,10 +8,13 @@ import numpy as np
 
 from time_inversi.mcts import UniformEvaluator
 from time_inversi.rules import create_game, legal_actions
-from time_inversi.serve import make_handler
+from time_inversi.serve import STATIC, make_handler
 
 
 class BrowserServerTests(unittest.TestCase):
+    def test_browser_pro_model_is_served(self):
+        self.assertEqual(STATIC['/assets/ai/pro-model.js'], 'assets/ai/pro-model.js')
+
     def test_serves_game_and_returns_legal_pro_move(self):
         server = ThreadingHTTPServer(('127.0.0.1', 0),
                                      make_handler(UniformEvaluator(), 4, np.random.default_rng(7)))
@@ -25,7 +28,7 @@ class BrowserServerTests(unittest.TestCase):
                 self.skipTest('Localhost sockets are restricted in this execution environment')
             response = connection.getresponse()
             self.assertEqual(response.status, 200)
-            self.assertIn(b'TIME INVERSI', response.read())
+            self.assertIn(b'TIME REVERSI', response.read())
             connection.request('GET', '/python_ai/runs/experiment01/latest.pt')
             response = connection.getresponse()
             self.assertEqual(response.status, 404)

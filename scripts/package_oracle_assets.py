@@ -17,7 +17,7 @@ EXPECTED = {
     "python_ai/runs/oracle-opening-pretrain-v1.pt":
         "ef9be45acacf861574f9a0c5c97be7c87dba99f999cc8cf0d1ef5c9f27d816aa",
 }
-README = """Time Inversi — Oracle PRO learning assets
+README = """TIME REVERSI — Oracle PRO learning assets
 
 These files are separate from the public Git repository. Extract this ZIP into
 the repository root (the directory containing index.html). The archive keeps
@@ -25,7 +25,7 @@ the required python_ai/pretrained/ and python_ai/runs/ paths. Existing game
 code, MID weights and Python environment are not replaced.
 
 Then follow python_ai/PRO_TRAINING_GUIDE.md to create a Python environment and
-start the Time Inversi self-play training. The included checkpoint already
+start the TIME REVERSI self-play training. The included checkpoint already
 contains the recommended Oracle-based pretraining, so pretraining need not be
 repeated.
 

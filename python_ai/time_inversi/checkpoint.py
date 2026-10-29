@@ -30,7 +30,7 @@ def load(path, device='cpu'):
     # Save/load use the same path and schema; clocks remain metadata only.
     data = torch.load(path, map_location='cpu', weights_only=True)
     if data.get('format') != FORMAT:
-        raise ValueError('Checkpoint is not for the current Time Inversi rules and encoding')
+        raise ValueError('Checkpoint is not for the current TIME REVERSI rules and encoding')
     model = PolicyValueNet(NetworkConfig(**data['network_config'])).to(device)
     model.load_state_dict(data['model'])
     model.eval()

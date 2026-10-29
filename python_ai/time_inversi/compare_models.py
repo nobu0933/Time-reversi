@@ -1,4 +1,4 @@
-"""Paired Time Inversi matches between two trained checkpoints."""
+"""Paired TIME REVERSI matches between two trained checkpoints."""
 import argparse
 import json
 import numpy as np

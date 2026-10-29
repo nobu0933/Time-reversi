@@ -1,6 +1,6 @@
 # 新方式PRO：ダウンロードから学習・評価まで
 
-この手順は、通常6×6オセロの教師による事前学習済み重みから、Time Inversiの自己対戦100イテレーションを新規に始めるためのものです。**学習用には`Time Inversi`フォルダー全体**をダウンロード・展開してください。`dist/time-inversi-web.zip`はWeb公開専用で、Pythonの学習コードと教師重みを含みません。`AlphaZero`などの別フォルダーやNode.jsは学習に不要です。
+この手順は、通常6×6オセロの教師による事前学習済み重みから、TIME REVERSIの自己対戦100イテレーションを新規に始めるためのものです。**学習用には`Time Inversi`フォルダー全体**をダウンロード・展開してください。`dist/time-inversi-web.zip`はWeb公開専用で、Pythonの学習コードと教師重みを含みません。`AlphaZero`などの別フォルダーやNode.jsは学習に不要です。
 
 以下は64ビット版Pythonが使えるWindows PCのPowerShellを想定します。CPUだけで実行できます。確認済みの環境はWindows、Python 3.14、PyTorch 2.14.1（CPU）です。最初のライブラリ導入にはインターネット接続が必要です。
 
@@ -42,7 +42,7 @@ python -m venv .venv-pro
 
 ## 3. 新PROの自己対戦学習を始める
 
-`runs/oracle-opening-pretrain-v1.pt`がある場合、教師からの事前学習は**再実行不要**です。通常オセロ由来とTime Inversi由来の局面を半々にし、Oracleの定跡・評価関数と通常オセロの終盤厳密解を教師にしています。通常局面8割の重みも試しましたが、独立した終盤局面では改善しなかったため、現時点ではこの重みを推奨します。自己対戦はTime Inversiのルールと実際の勝敗を使用します。
+`runs/oracle-opening-pretrain-v1.pt`がある場合、教師からの事前学習は**再実行不要**です。通常オセロ由来とTIME REVERSI由来の局面を半々にし、Oracleの定跡・評価関数と通常オセロの終盤厳密解を教師にしています。通常局面8割の重みも試しましたが、独立した終盤局面では改善しなかったため、現時点ではこの重みを推奨します。自己対戦はTIME REVERSIのルールと実際の勝敗を使用します。
 
 最初に短い実行確認をする場合は、空の保存先を指定して次を実行します。`metrics.jsonl`に`reverse_turns`や`corner_inversions`が記録され、`latest.pt`が作られれば、自己対戦から重み更新まで動いています。
 
@@ -56,7 +56,7 @@ python -m venv .venv-pro
 .\.venv-pro\Scripts\python.exe -m time_inversi.train --init-model runs/oracle-opening-pretrain-v1.pt --iterations 100 --self-play-games 10 --simulations 64 --device cpu --output runs/pro01
 ```
 
-`runs/pro01`は新しい保存先です。既に使用済みなら`runs/pro02`など別名に変更してください。100イテレーションで、各回にTime Inversiのルールによる自己対戦10局、各手64探索、100回の重み更新を行い、5イテレーションごとにランダムAI・greedy AIとの評価も行います。各イテレーション終了時に`runs/pro01/latest.pt`を保存し、`runs/pro01/metrics.jsonl`に損失・対局長・逆行中の手番数`reverse_turns`・パス回数`passes`・角による時間反転回数`corner_inversions`・評価結果を追記します。Oracle版の重みから本学習と同じ設定で1イテレーションを実測すると226.1秒、評価40局の推定は約6分29秒でした。100回へ外挿した中心値は**約8.4時間**で、変動を見込んだ予定枠は**8〜12時間**です。MIDとの追加比較は別にかかります。最初の5〜10イテレーションの所要時間を確認し、残り時間を見積もってください。
+`runs/pro01`は新しい保存先です。既に使用済みなら`runs/pro02`など別名に変更してください。100イテレーションで、各回にTIME REVERSIのルールによる自己対戦10局、各手64探索、100回の重み更新を行い、5イテレーションごとにランダムAI・greedy AIとの評価も行います。各イテレーション終了時に`runs/pro01/latest.pt`を保存し、`runs/pro01/metrics.jsonl`に損失・対局長・逆行中の手番数`reverse_turns`・パス回数`passes`・角によるTime reversal回数`corner_inversions`・評価結果を追記します。Oracle版の重みから本学習と同じ設定で1イテレーションを実測すると226.1秒、評価40局の推定は約6分29秒でした。100回へ外挿した中心値は**約8.4時間**で、変動を見込んだ予定枠は**8〜12時間**です。MIDとの追加比較は別にかかります。最初の5〜10イテレーションの所要時間を確認し、残り時間を見積もってください。
 
 Ctrl+Cで停止した場合、完了済みの最後のイテレーションから再開できます。`--iterations`は**追加する回数**です。例えば50回完了後に残り50回を実行する場合：
 
@@ -95,7 +95,7 @@ MIDの`runs/experiment01/latest.pt`もある場合、最後に両モデルを黒
 
 ## 事前学習を作り直す場合のみ
 
-`runs/oracle-opening-pretrain-v1.pt`がない場合、同梱のOracle係数表と序盤定跡から新しい出力名で作れます。この評価関数は通常オセロ用で、Time Inversiの時間反転まで解いたものではありません。その後に上記の自己対戦学習が必要です。
+`runs/oracle-opening-pretrain-v1.pt`がない場合、同梱のOracle係数表と序盤定跡から新しい出力名で作れます。この評価関数は通常オセロ用で、TIME REVERSIのTime reversalまで解いたものではありません。その後に上記の自己対戦学習が必要です。
 
 ```powershell
 .\.venv-pro\Scripts\python.exe -m time_inversi.pretrain --teacher pretrained/oracle-weight.rs --output runs/oracle-pretrain-new.pt --ordinary-games 80 --variant-games 80 --ordinary-share 0.5 --samples 2000 --updates 3000 --augment-symmetries --teacher-type oracle --exact-empty 10 --device cpu

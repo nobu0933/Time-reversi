@@ -41,4 +41,4 @@ Get-Content runs/pro-long-from-102/metrics.jsonl | Select-Object -Last 5
 .\.venv\Scripts\python.exe -m time_inversi.compare_models --candidate runs/pro-long-from-102/iteration-172.pt --incumbent runs/pro-long-from-102/mid.pt --games 40 --simulations 64 --seed 31002 --device cpu
 ```
 
-MIDとの10局の成績だけでは強さを確定できない。107、112、…、172回目の候補を見比べ、別乱数種でPRO100・MIDの両方へ黒白同数で評価する。白番の成績や時間反転が起きた対局も確認し、最良候補を選んでからブラウザへ書き出す。
+MIDとの10局の成績だけでは強さを確定できない。107、112、…、172回目の候補を見比べ、別乱数種でPRO100・MIDの両方へ黒白同数で評価する。白番の成績やTime reversalが起きた対局も確認し、最良候補を選んでからブラウザへ書き出す。

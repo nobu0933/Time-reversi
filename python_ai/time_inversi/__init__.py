@@ -1,1 +1,1 @@
-"""Time Inversi rules and AlphaZero-style self-play training."""
+"""TIME REVERSI rules and AlphaZero-style self-play training."""

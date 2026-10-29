@@ -26,6 +26,7 @@ STATIC = {
     '/src/ai/network.js': 'src/ai/network.js',
     '/src/ai/search.js': 'src/ai/search.js',
     '/assets/ai/model.js': 'assets/ai/model.js',
+    '/assets/ai/pro-model.js': 'assets/ai/pro-model.js',
     '/assets/icon/bgm-on.svg': 'assets/icon/bgm-on.svg',
     '/assets/icon/bgm-off.svg': 'assets/icon/bgm-off.svg',
     '/assets/icon/time-inversion-forward.svg': 'assets/icon/time-inversion-forward.svg',
@@ -33,9 +34,22 @@ STATIC = {
     '/assets/icon/pocket-watch-frame.svg': 'assets/icon/pocket-watch-frame.svg',
     '/assets/icon/pocket-watch-hand.svg': 'assets/icon/pocket-watch-hand.svg',
     '/assets/icon/replay.svg': 'assets/icon/replay.svg',
+    '/assets/icon/pause.svg': 'assets/icon/pause.svg',
+    '/assets/icon/reset.svg': 'assets/icon/reset.svg',
+    '/assets/icon/undo.svg': 'assets/icon/undo.svg',
+    '/assets/sounds/put.mp3': 'assets/sounds/put.mp3',
+    '/assets/sounds/switch.mp3': 'assets/sounds/switch.mp3',
+    '/assets/sounds/pass.mp3': 'assets/sounds/pass.mp3',
+    '/assets/sounds/put-reverse.wav': 'assets/sounds/put-reverse.wav',
+    '/assets/sounds/time-reversal.wav': 'assets/sounds/time-reversal.wav',
 }
+for name in ('komorebi_orgel', 'tsukikage_orgel'):
+    for suffix in ('', '_150x_reverse', '_150x', '_200x_reverse', '_200x'):
+        path = f'assets/sounds/{name}{suffix}.mp3'
+        STATIC['/' + path] = path
 MIME = {'.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
-        '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml'}
+        '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml',
+        '.mp3': 'audio/mpeg', '.wav': 'audio/wav'}
 MAX_BODY = 128 * 1024
 
 

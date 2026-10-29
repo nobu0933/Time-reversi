@@ -1,7 +1,7 @@
 """Compare distilled models with exact *ordinary* 6x6 endgame moves.
 
 The variant-derived positions are still solved under ordinary Othello rules.
-This measures transfer of the ordinary teacher, not Time Inversi strength.
+This measures transfer of the ordinary teacher, not TIME REVERSI strength.
 """
 import argparse
 import json
