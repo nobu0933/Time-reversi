@@ -265,22 +265,26 @@ button:disabled {
 .cpu-control button {
 	width: 4.25cqw;
 	height: 4.25cqw;
+	font-family: Arial, sans-serif;
+	font-size: 1.65cqw;
+	font-weight: 800;
+	line-height: 1;
+	letter-spacing: 0;
 }
 .cpu-control button[aria-pressed='true'] {
 	background: var(--board);
 	color: white;
 }
+.cpu-control button[data-mode='OFF'] {
+	color: #333333;
+}
 .cpu-control button[data-mode='MID'] {
 	background: #285c8c;
 	color: white;
-	font-size: 1.65cqw;
-	font-weight: 800;
 }
 .cpu-control button[data-mode='PRO'] {
 	background: #304d68;
 	color: white;
-	font-size: 1.65cqw;
-	font-weight: 800;
 }
 .game-log {
 	position: absolute;
@@ -671,11 +675,7 @@ body.reverse-time {
 		width: 10cqw;
 		height: 10cqw;
 		border-radius: 2cqw;
-		font-size: 3.7cqw;
-	}
-	.cpu-control button[data-mode='MID'],
-	.cpu-control button[data-mode='PRO'] {
-		font-size: 3.3cqw;
+		font-size: 3.5cqw;
 	}
 	.game-log {
 		top: max(91%, calc(50% + 48.05cqw + 16cqw));
