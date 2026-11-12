@@ -465,6 +465,73 @@ body.reverse-time {
 	will-change: filter;
 	backface-visibility: hidden;
 }
+/* Home Screen WebKit can briefly drop a large SVG filter during piece animation. */
+body.standalone-app.reverse-time {
+	--board: #007828;
+	--edge: #0f4f3f;
+	--line: #9cc2ad;
+	--legal: #69ac85;
+	--black: #39484a;
+	--black-side: #002620;
+	--white: #faffff;
+	--white-side: #3ba787;
+}
+body.standalone-app.reverse-time .stage,
+body.standalone-app.reverse-time .cursor-piece,
+body.standalone-app.reverse-time dialog {
+	filter: none;
+}
+body.standalone-app.reverse-time .stage {
+	will-change: auto;
+}
+body.standalone-app.reverse-time .cell.forward-stone {
+	--time-fill: #a9777e;
+}
+body.standalone-app.reverse-time .cell.reverse-stone {
+	--time-fill: #3d6cbb;
+}
+body.standalone-app.reverse-time .cell.forward-stone.nearest-time {
+	background: #b95778;
+}
+body.standalone-app.reverse-time .cell.reverse-stone.nearest-time {
+	background: #3263d4;
+}
+body.standalone-app.reverse-time .cell.forward-stone.second-time {
+	background: #a37379;
+}
+body.standalone-app.reverse-time .cell.reverse-stone.second-time {
+	background: #4b72bf;
+}
+body.standalone-app.reverse-time .clock-sectors {
+	background: conic-gradient(
+		from var(--clock-start, 0deg),
+		#a9777e 0deg var(--orange-end, 0deg),
+		#3d6cbb var(--orange-end, 0deg) var(--blue-end, 0deg),
+		transparent var(--blue-end, 0deg) 360deg
+	);
+}
+body.standalone-app.reverse-time .icon-button,
+body.standalone-app.reverse-time .cpu-control button {
+	background: #cdcdc9;
+	box-shadow: 0 0.55cqw 0 #6e6c6d;
+}
+body.standalone-app.reverse-time .icon-button:active:not(:disabled),
+body.standalone-app.reverse-time .cpu-control button:active {
+	box-shadow: 0 0.1cqw 0 #6e6c6d;
+}
+body.standalone-app.reverse-time dialog {
+	background: #cdcdc9;
+	box-shadow: 0 0.8cqw 0 #6e6c6d;
+}
+body.standalone-app.reverse-time .cpu-control button[aria-pressed='true'] {
+	background: var(--board);
+}
+body.standalone-app.reverse-time .cpu-control button[data-mode='MID'] {
+	background: #3d5d85;
+}
+body.standalone-app.reverse-time .cpu-control button[data-mode='PRO'] {
+	background: #3b5368;
+}
 .time-pulse {
 	animation: time-pulse 360ms ease-out;
 }

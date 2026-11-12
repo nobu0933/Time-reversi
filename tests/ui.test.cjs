@@ -6,7 +6,7 @@ const R = require('../src/game/rules.js');
 const Replay = require('../src/game/replay.js');
 
 // A small DOM and virtual clock exercise UI scheduling without a browser or network.
-function app(initial = R.createGame(), chooseMove = () => Promise.reject(new Error('No PRO test model'))) {
+function app(initial = R.createGame(), chooseMove = () => Promise.reject(new Error('No PRO test model')), standalone = false) {
   class Element {
     constructor() {
       this.children = []; this.attrs = {}; this.events = {}; this.hidden = false;
@@ -49,7 +49,7 @@ function app(initial = R.createGame(), chooseMove = () => Promise.reject(new Err
     pause() { this.paused = true; }
   }
   const context = { window: { Reversi: { ...R, createGame: () => Replay.snapshot(initial) }, ReplayTimeline: Replay, ProAI: { choose: chooseMove }, addEventListener() {} }, document,
-    navigator: { clipboard: { async writeText(text) { copied = text; } } },
+    navigator: { standalone, clipboard: { async writeText(text) { copied = text; } } },
     matchMedia: () => ({ matches: false }), setTimeout: (fn, ms) => { timers.set(++next, { fn, at: now + ms }); return next; }, clearTimeout: id => timers.delete(id), console,
     AbortController, Audio };
   vm.runInNewContext(fs.readFileSync(require.resolve('../src/ui/game.js'), 'utf8'), context);
@@ -132,8 +132,9 @@ test('touch placement does not leave the next player cursor at the tapped positi
 
 test('reverse placement keeps its tint and leaves unchanged stones mounted', async () => {
   const state = R.createGame(); state.direction = -1;
-  const ui = app(state);
+  const ui = app(state, undefined, true);
   const untouched = ui.ids.cells.children[21].children[0];
+  assert.equal(ui.document.body.classList.contains('standalone-app'), true);
   assert.equal(ui.document.body.classList.contains('reverse-time'), true);
   ui.move(8);
   assert.equal(ui.document.body.classList.contains('reverse-time'), true);

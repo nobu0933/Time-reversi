@@ -17,6 +17,10 @@
   const replay = document.querySelector('#replay');
   const timeClock = document.querySelector('#time-clock');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const standaloneApp = navigator.standalone === true
+    || matchMedia('(display-mode: standalone)').matches
+    || matchMedia('(display-mode: fullscreen)').matches;
+  document.body.classList.toggle('standalone-app', standaloneApp);
   const corners = new Set([0, R.SIZE - 1, R.SIZE * (R.SIZE - 1), R.SIZE * R.SIZE - 1]);
   let game = R.createGame();
   let replayFrames = [Replay.snapshot(game)], moveHistory = [], shownRecord = '', epoch = 0, replaying = false;
