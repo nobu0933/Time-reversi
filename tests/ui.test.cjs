@@ -130,6 +130,19 @@ test('touch placement does not leave the next player cursor at the tapped positi
   assert.equal(ui.document.body.children[0].hidden, true);
 });
 
+test('reverse placement keeps its tint and leaves unchanged stones mounted', async () => {
+  const state = R.createGame(); state.direction = -1;
+  const ui = app(state);
+  const untouched = ui.ids.cells.children[21].children[0];
+  assert.equal(ui.document.body.classList.contains('reverse-time'), true);
+  ui.move(8);
+  assert.equal(ui.document.body.classList.contains('reverse-time'), true);
+  assert.equal(ui.ids.cells.children[21].children[0], untouched);
+  await ui.tick(500);
+  assert.equal(ui.document.body.classList.contains('reverse-time'), true);
+  assert.equal(ui.ids.cells.children[21].children[0], untouched);
+});
+
 test('both time directions shade stones by pending turns including passes', () => {
   const state = R.createGame();
   for (const [index, color, direction] of [[0, R.BLACK, 1], [1, R.WHITE, 1], [5, R.WHITE, -1]]) {

@@ -70,6 +70,9 @@
   const cancelled = Symbol('cancelled');
   let { board, player, ended } = game;
   let busy = false, hover = -1, turnTimer, logTimer, aiRequest;
+  const renderedBoard = Array(R.SIZE * R.SIZE).fill(null);
+  const renderedCorners = Array(R.SIZE * R.SIZE).fill(null);
+  let renderedDirection = null;
   let pointer = null, target = -1, suppressMouseUntil = 0;
   const cursor = piece(player, 'cursor-piece');
   cursor.hidden = true;
@@ -229,7 +232,6 @@
     timeClock.setAttribute('aria-label', `${game.direction === 1 ? 'Forward' : 'Reverse'} time. ${clock.forward} forward stones, ${clock.reverse} reverse stones`);
     const legal = busy || ended ? [] : R.moves(board, player);
     cells.forEach((cell, index) => {
-      cell.replaceChildren();
       cell.classList.toggle('legal', legal.includes(index));
       const activeCorner = corners.has(index) && !game.usedCorners.includes(index) && !board[index];
       cell.classList.toggle('inversion-corner', activeCorner);
@@ -237,16 +239,23 @@
       cell.classList.toggle('reverse-stone', game.origins[index] === -1);
       cell.setAttribute('aria-disabled', String(!legal.includes(index)));
       cell.setAttribute('aria-label', `Row ${Math.floor(index / 6) + 1}, column ${index % 6 + 1}: ${board[index] ? name(board[index]) : 'empty'}${activeCorner ? ', Time reversal corner' : ''}`);
-      if (board[index]) cell.append(piece(board[index]));
-      if (activeCorner) {
-        const icon = document.createElement('img');
-        icon.className = 'corner-icon';
-        icon.src = game.direction === 1 ? 'assets/icon/time-inversion-forward.svg' : 'assets/icon/time-inversion-reverse.svg';
-        icon.alt = '';
-        icon.setAttribute('aria-hidden', 'true');
-        cell.append(icon);
+      if (renderedBoard[index] !== board[index] || renderedCorners[index] !== activeCorner
+        || (activeCorner && renderedDirection !== game.direction)) {
+        cell.replaceChildren();
+        if (board[index]) cell.append(piece(board[index]));
+        if (activeCorner) {
+          const icon = document.createElement('img');
+          icon.className = 'corner-icon';
+          icon.src = game.direction === 1 ? 'assets/icon/time-inversion-forward.svg' : 'assets/icon/time-inversion-reverse.svg';
+          icon.alt = '';
+          icon.setAttribute('aria-hidden', 'true');
+          cell.append(icon);
+        }
       }
+      renderedBoard[index] = board[index];
+      renderedCorners[index] = activeCorner;
     });
+    renderedDirection = game.direction;
     updateTimeShades();
     preview();
 

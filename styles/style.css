@@ -461,6 +461,10 @@ body.reverse-time {
 .reverse-time dialog {
 	filter: url(#time-tint);
 }
+.reverse-time .stage {
+	will-change: filter;
+	backface-visibility: hidden;
+}
 .time-pulse {
 	animation: time-pulse 360ms ease-out;
 }
